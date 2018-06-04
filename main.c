@@ -20,6 +20,65 @@ struct fila{
 
 typedef struct fila Fila;
 
+Lista *insere(Lista *L,char cod[7],int comb);
+Lista *gerarFila(int n, int c);
+Fila *preencherFila(Lista *L);
+void remover(Fila *F);
+int detectarEmergencia(Fila *F);
+void diminuirComb(Fila *F);
+void simular(Fila *aprox, Fila *deco);
+
+int main()
+{
+    
+   srand(time(NULL));
+  int na = rand()%23;
+  na+=10;
+  int nd = rand()%23;
+ nd+=10;
+
+
+  
+  
+  Lista *taprox;
+  Lista *tdeco;
+  Lista *aux;
+   
+  
+  
+  taprox = gerarFila(na,0);
+  tdeco = gerarFila(nd,1);
+  
+  Fila *aprox;
+  Fila *deco;
+  aprox = preencherFila(taprox);
+  deco = preencherFila(tdeco);
+
+
+
+
+printf("\n Num de pouso:%d\nNum de deco: %d\n",na,nd);
+
+   
+   printf("\nCombustiveis atuais:\n");
+   
+   for(aux=aprox->ini;aux!=NULL;aux=aux->prox){
+         
+        printf("%s \n%d\n\n",aux->cod,aux->comb);
+
+   }
+
+
+  printf("\n");
+
+
+ simular(aprox,deco);
+  
+  
+
+    
+	return 0;
+}
 Lista *insere(Lista *L,char cod[7],int comb){
     
     Lista *elem;
@@ -139,6 +198,10 @@ Fila *preencherFila(Lista *L){
               }    
     
     }
+    
+    printf("Houve um erro");
+    return NULL;
+    
 }
 
 void remover(Fila *F){
@@ -380,55 +443,3 @@ void simular(Fila *aprox, Fila *deco){
     }
     
 }
-int main()
-{
-    
-   srand(time(NULL));
-  int na = rand()%23;
-  na+=10;
-  int nd = rand()%23;
- nd+=10;
-
-
-  
-  
-  Lista *taprox;
-  Lista *tdeco;
-  Lista *aux;
-   
-  
-  
-  taprox = gerarFila(na,0);
-  tdeco = gerarFila(nd,1);
-  
-  Fila *aprox;
-  Fila *deco;
-  aprox = preencherFila(taprox);
-  deco = preencherFila(tdeco);
-
-
-
-
-printf("\n Num de pouso:%d\nNum de deco: %d\n",na,nd);
-
-   
-   printf("\nCombustiveis atuais:\n");
-   
-   for(aux=aprox->ini;aux!=NULL;aux=aux->prox){
-         
-        printf("%s \n%d\n\n",aux->cod,aux->comb);
-
-   }
-
-
-  printf("\n");
-
-
- simular(aprox,deco);
-  
-  
-
-    
-	return 0;
-}
-
