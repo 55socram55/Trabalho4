@@ -4,6 +4,7 @@
 #include <time.h>
 
 struct elem{
+    char iden;
     char cod[7];
     int comb;
     struct elem *prox;
@@ -20,7 +21,7 @@ struct fila{
 
 typedef struct fila Fila;
 
-Lista *insere(Lista *L,char cod[7],int comb);
+Lista *insere(Lista *L,char cod[7],int comb, char ident);
 Lista *gerarFila(int n, int c);
 Fila *preencherFila(Lista *L);
 void remover(Fila *F);
@@ -54,22 +55,14 @@ int main()
   aprox = preencherFila(taprox);
   deco = preencherFila(tdeco);
 
-
-
-
-printf("\n Num de pouso:%d\nNum de deco: %d\n",na,nd);
-
-   
-   printf("\nCombustiveis atuais:\n");
-   
-   for(aux=aprox->ini;aux!=NULL;aux=aux->prox){
-         
-        printf("%s \n%d\n\n",aux->cod,aux->comb);
-
-   }
-
-
-  printf("\n");
+printf("----------------------------------------------\n");
+printf("\"Aeroporto Internacional de Brasilia\"\n");
+printf("Hora inicial: 12:00\n");
+printf("Fila de pedidos: %s - P - %d\n",aprox->ini->cod,aprox->ini->comb);
+printf("NVoos: %d\nNaproximacoes: %d\nNdecolagens: %d\n",na+nd,na,nd);
+printf("----------------------------------------------\n");
+ 
+ printf("Listagem de eventos:\n");
 
 
  simular(aprox,deco);
@@ -79,7 +72,7 @@ printf("\n Num de pouso:%d\nNum de deco: %d\n",na,nd);
     
 	return 0;
 }
-Lista *insere(Lista *L,char cod[7],int comb){
+Lista *insere(Lista *L,char cod[7],int comb, char ident){
     
     Lista *elem;
     Lista *aux;
@@ -88,6 +81,7 @@ Lista *insere(Lista *L,char cod[7],int comb){
     strncpy(elem->cod,cod,sizeof(elem->cod)-1);
     elem->cod[6] = '\0';
     elem->comb = comb;
+    elem->iden = ident;
     
     
     if(L==NULL){
@@ -163,8 +157,7 @@ Lista *gerarFila(int n, int c){
     if(c==0){
        for(i=0;i<n;i++){
              comb = rand()%13;
-             printf("inserindo %s de comb %d\n",codigos[i],comb);
-             L = insere(L,codigos[i],comb);
+             L = insere(L,codigos[i],comb,'A');
            }
        return L; 
         
@@ -172,8 +165,7 @@ Lista *gerarFila(int n, int c){
     else{
         
        for(i=0;i<n;i++){
-             printf("inserindo %s de comb %d\n",codigos[i+32],-1);
-             L = insere(L,codigos[i+32],-1);
+             L = insere(L,codigos[i+32],-1,'D');
            }
            
        return L;         
@@ -254,15 +246,6 @@ void diminuirComb(Fila *F){
     
     }
     
-   printf("\nCombustiveis atuais:\n");   
-    
-       for(aux=F->ini;aux!=NULL;aux=aux->prox){
-         
-        printf("%s \n%d\n\n",aux->cod,aux->comb);
-
-   }
-   printf("\n");
-    
 }
 void simular(Fila *aprox, Fila *deco){
 
@@ -301,7 +284,6 @@ void simular(Fila *aprox, Fila *deco){
                 printf("Codigo de voo: %s\nStatus: Aeronave Pousou\nHorario de inicio:%d:%.2d\nNumero da pista: 1\n\n"
                   ,aprox->ini->cod,hora,min);
                 
-                printf("Esse foi o voo %d\n",i);
                 i++;
                 
                 
@@ -319,7 +301,6 @@ void simular(Fila *aprox, Fila *deco){
                   ,deco->ini->cod,hora,min);
                 
 
-                printf("Esse foi o voo %d\n",i);
                 i++;
                               
                 remover(deco);                 
@@ -347,7 +328,6 @@ void simular(Fila *aprox, Fila *deco){
                 printf("Codigo de voo: %s\nStatus: Aeronave Pousou\nHorario de inicio:%d:%.2d\nNumero da pista: 2\n\n"
                   ,aprox->ini->cod,hora,min);
                 
-                printf("Esse foi o voo %d\n",i);
                 i++;
                               
                   remover(aprox);
@@ -362,7 +342,6 @@ void simular(Fila *aprox, Fila *deco){
                 printf("Codigo de voo: %s\nStatus: Aeronave Decolou\nHorario de inicio:%d:%.2d\nNumero da pista: 2\n\n"
                   ,deco->ini->cod,hora,min);
 
-                printf("Esse foi o voo %d\n",i);
                 i++;
                               
                 remover(deco);                 
@@ -392,7 +371,6 @@ void simular(Fila *aprox, Fila *deco){
                 printf("Codigo de voo: %s\nStatus: Aeronave Pousou\nHorario de inicio:%d:%.2d\nNumero da pista: 3\n\n"
                   ,aprox->ini->cod,hora,min);
 
-                printf("Esse foi o voo %d\n",i);
                 i++;
                               
                 remover(aprox);                 
@@ -406,7 +384,7 @@ void simular(Fila *aprox, Fila *deco){
             
                 printf("Codigo de voo: %s\nStatus: Aeronave Decolou\nHorario de inicio:%d:%.2d\nNumero da pista: 3\n\n"
                   ,deco->ini->cod,hora,min);
-                printf("Esse foi o voo %d\n",i);
+    
                 i++;                
                               
                 remover(deco);                 
@@ -434,12 +412,12 @@ void simular(Fila *aprox, Fila *deco){
         k++;
         
         if(deco->ini==NULL && aprox->ini==NULL){break;}
-       // printf("%s\n",aprox->ini->cod);
+    
         
         min += 5;
         if(min>=60){min=min-60;hora++;}
         j++;
-       // printf("\n hor: %d:%.2d\n",hora,min);
+       
     }
     
 }
