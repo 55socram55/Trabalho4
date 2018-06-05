@@ -198,12 +198,7 @@ Fila *preencherFila(Lista *L){
 
 void remover(Fila *F){
     
-   if(F->ini == NULL){
-       
-        F->ini = NULL;
-    }  
-    
-   else{
+   if(F->ini != NULL){
    
    Lista *temp = (F->ini)->prox;
    free(F->ini);
